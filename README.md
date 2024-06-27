@@ -18,7 +18,21 @@ You can make required changes to the the database_table_descriptions.csv and few
 python3 NLToSQL.py --desc_path "PATH_FOR_DATABASE_DESCRIPTION" --example_path "few_shot_examples_path" --db_user "SQL_DB_Username" --db_password "PASSWORD" --db_host "HOSTNAME" --db_name "DATABSE_NAME" --open_ai_key "YOUR_OPEN_AI_API_KEY"
 ```
 
-Example implementation post running the code:
+Setting up the dummy DB for testing(Implement this before running the above command):
+
+```
+sudo apt-get -y install mysql-server
+
+sudo service mysql start
+
+sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'root';FLUSH PRIVILEGES;"
+
+mysql -u root -p (then input the password i.e. root)
+
+mysql> source ~/database/mysqlsampledatabase.sql
+```
+
+Example implementation on dummy database post running the code:
 
 ![alt text](image.png)
 
