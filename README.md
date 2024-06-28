@@ -6,6 +6,11 @@
 
 This script can be run on any local msql database provided you input the correct username, password, host name and DB name. All of these can be passed as arguments to the command to run the provided script.
 
+To install required libraries:
+```
+pip install -r requirments.txt
+```
+
 To run this code please traverse into the directory where the NLT0SQL.py script is present and use run the below command with your Open AI API key on your own database please use the below command:
 
 ```
