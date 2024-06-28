@@ -25,8 +25,8 @@
             "query": "SELECT `buyPrice`, `MSRP` FROM products WHERE `productName` = '1968 Ford Mustang' LIMIT 1;"
         },
         {
-        "input": "Find all albums for the artist 'AC/DC'.",
-        "query": "SELECT * FROM Album WHERE ArtistId = (SELECT ArtistId FROM Artist WHERE Name = 'AC/DC');",
+            "input": "Find all albums for the artist 'AC/DC'.",
+            "query": "SELECT * FROM Album WHERE ArtistId = (SELECT ArtistId FROM Artist WHERE Name = 'AC/DC');",
         },
         {
             "input": "List all tracks in the 'Rock' genre.",
