@@ -36,4 +36,7 @@ Example implementation on dummy database post running the code:
 
 ![alt text](image.png)
 
-This project was inspired by Prdip Nichte's blog https://blog.futuresmart.ai/mastering-natural-language-to-sql-with-langchain-nl2sql
+References: 
+- https://blog.futuresmart.ai/mastering-natural-language-to-sql-with-langchain-nl2sql
+- https://python.langchain.com/v0.1/docs/modules/model_io/prompts/few_shot_examples_chat/
+- https://python.langchain.com/v0.1/docs/use_cases/sql/
