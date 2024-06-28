@@ -62,7 +62,7 @@
         },
         {
             "input": "How many employees are there",
-            "query": 'SELECT COUNT(*) FROM "Employee"',
+            "query": "SELECT COUNT(*) FROM 'Employee'",
         },
 
     ]
