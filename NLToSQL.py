@@ -21,7 +21,18 @@ from argparse import ArgumentParser
 import json
 from langchain.memory import ChatMessageHistory
 from langchain_community.tools.sql_database.tool import QuerySQLDataBaseTool
+import subprocess
+import sys
+from transformers import pipeline
+import librosa
+import soundfile
+import datasets
+import sounddevice as sd
+import numpy as np
+import io
 
+model_id = "avnishkanungo/whisper-small-dv"  # update with your model id
+pipe = pipeline("automatic-speech-recognition", model=model_id)
 
 def select_table(desc_path):
     def get_table_details():
@@ -119,6 +130,73 @@ def rephrase_answer():
 
     return rephrase_answer
 
+def is_ffmpeg_installed():
+    try:
+        # Run `ffmpeg -version` to check if ffmpeg is installed
+        subprocess.run(['ffmpeg', '-version'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+def install_ffmpeg():
+    try:
+        if sys.platform.startswith('linux'):
+            subprocess.run(['sudo', 'apt-get', 'update'], check=True)
+            subprocess.run(['sudo', 'apt-get', 'install', '-y', 'ffmpeg'], check=True)
+        elif sys.platform == 'darwin':  # macOS
+            subprocess.run(['/bin/bash', '-c', 'brew install ffmpeg'], check=True)
+        elif sys.platform == 'win32':
+            print("Please download ffmpeg from https://ffmpeg.org/download.html and install it manually.")
+            return False
+        else:
+            print("Unsupported OS. Please install ffmpeg manually.")
+            return False
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install ffmpeg: {e}")
+        return False
+    return True
+
+def transcribe_speech(filepath):
+        output = pipe(
+            filepath,
+            max_new_tokens=256,
+            generate_kwargs={
+                "task": "transcribe",
+                "language": "english",
+            },  # update with the language you've fine-tuned on
+            chunk_length_s=30,
+            batch_size=8,
+        )
+        return output["text"]
+    
+def record_command():
+        sample_rate = 16000  # Sample rate in Hz
+        duration = 8  # Duration in seconds
+
+        print("Recording...")
+
+        # Record audio
+        audio = sd.rec(int(sample_rate * duration), samplerate=sample_rate, channels=1, dtype='float32')
+        sd.wait()  # Wait until recording is finished
+
+        print("Recording finished")
+
+        # Convert the audio to a binary stream and save it to a variable
+        audio_buffer = io.BytesIO()
+        soundfile.write(audio_buffer, audio, sample_rate, format='WAV')
+        audio_buffer.seek(0)  # Reset buffer position to the beginning
+
+        # The audio file is now saved in audio_buffer
+        # You can read it again using soundfile or any other audio library
+        audio_data, sample_rate = soundfile.read(audio_buffer)
+
+        # Optional: Save the audio to a file for verification
+        # with open('recorded_audio.wav', 'wb') as f:
+        #     f.write(audio_buffer.getbuffer())
+
+        print("Audio saved to variable")
+        return audio_data
+
 
 if __name__ == '__main__':
 
@@ -126,7 +204,7 @@ if __name__ == '__main__':
     parser.add_argument('--example_path', type=str, default=os.getcwd()+"/few_shot_samples.json")
     parser.add_argument('--desc_path', type=str, default=os.getcwd()+"/database_table_descriptions.csv")
     parser.add_argument('--db_user', type=str, default="root")
-    parser.add_argument('--db_password', type=str, default="root")
+    parser.add_argument('--db_password', type=str, default="")
     parser.add_argument('--db_host', type=str, default="localhost")
     parser.add_argument('--db_name', type=str, default="classicmodels")
     parser.add_argument('--open_ai_key', type=str)
@@ -141,7 +219,7 @@ if __name__ == '__main__':
     # print(db.dialect)
     # print(db.get_usable_table_names())
     # print(db.table_info)
-    os.environ["OPENAI_API_KEY"] =  args.open_ai_key 
+    os.environ["OPENAI_API_KEY"] =  args.open_ai_key  ## sk-proj-bdAIsQkrSB9uewgICSyiT3BlbkFJHGj7jCI2HAF9KIajD5XH
 
     history = ChatMessageHistory()
 
@@ -161,14 +239,54 @@ if __name__ == '__main__':
         | rephrase_answer()
     )
 
+    if is_ffmpeg_installed():
+        print("ffmpeg is already installed.")
+    else:
+        print("ffmpeg is not installed. Installing ffmpeg...")
+    if install_ffmpeg():
+        print("ffmpeg installation successful.")
+    else:
+        print("ffmpeg installation failed. Please install it manually.")
+
+    valid_interface_type = ["audio", "text", "quit"]
     while True:
-        user_input = input("Enter a question for the DB (or type 'quit' to exit): ")
-        if user_input.lower() == 'quit':
-            break
-        output = chain.invoke({"question": user_input, "messages":history.messages})
-        history.add_user_message(user_input)
-        history.add_ai_message(output)
-        print(output)
+        interface_type = input("Please enter 'audio', 'text', or 'quit': ").strip().lower()
+        if interface_type in valid_interface_type:
+            if interface_type == "quit":
+                print("Exiting the loop.")
+                break
+            elif interface_type == "text" :
+                print(f"You selected '{interface_type}'.")
+                while True:
+                    user_input = input("Enter a question for the DB (or type 'quit' to exit): ")
+                    if user_input.lower() == 'quit':
+                        break
+                    output = chain.invoke({"question": user_input, "messages":history.messages})
+                    history.add_user_message(user_input)
+                    history.add_ai_message(output)
+                    print(output)
+            elif interface_type == "audio":
+                print(f"You selected '{interface_type}'.") 
+                command = record_command()
+                sql_query = transcribe_speech(command)
+                print(sql_query)
+                output = chain.invoke({"question": sql_query, "messages":history.messages})
+                history.add_user_message(sql_query)
+                history.add_ai_message(output)
+                print(output)     
+
+        else:
+            print("Invalid input. Please try again.")
+
+
+    # while True:
+    #     user_input = input("Enter a question for the DB (or type 'quit' to exit): ")
+    #     if user_input.lower() == 'quit':
+    #         break
+    #     output = chain.invoke({"question": user_input, "messages":history.messages})
+    #     history.add_user_message(user_input)
+    #     history.add_ai_message(output)
+    #     print(output)
 
     
 

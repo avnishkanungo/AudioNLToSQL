@@ -1,10 +1,16 @@
-langchain==0.0.123  # Replace with the correct version for langchain
-transformers==4.28.1  # Replace with the correct version for transformers
-langchain_huggingface==0.0.1  # Replace with the correct version for langchain_huggingface
-langchain_openai==0.0.1  # Replace with the correct version for langchain_openai
-langchain_community==0.0.1  # Replace with the correct version for langchain_community
-langchain_core==0.0.1  # Replace with the correct version for langchain_core
+langchain==0.2.5  # Replace with the correct version for langchain
+transformers
+langchain_huggingface == 0.0.3  # Replace with the correct version for langchain_huggingface
+langchain_openai == 0.1.9  # Replace with the correct version for langchain_openai
+langchain_community == 0.2.5  # Replace with the correct version for langchain_community
+langchain_core == 0.2.9
+langchain-text-splitters == 0.2.1
 chromadb==0.3.22  # Replace with the correct version for chromadb
 pandas==1.5.3
 pydantic==1.10.8  # Ensure to match the version if langchain requires a specific one
-agrparse
+librosa == 0.10.2
+soundfile == 0.12.1
+gradio == 1.0.2
+datasets == 2.20.0
+PyMySQL == 1.1.1
+sounddevice == 0.4.7
