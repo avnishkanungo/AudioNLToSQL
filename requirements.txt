@@ -8,3 +8,7 @@ chromadb==0.3.22  # Replace with the correct version for chromadb
 pandas==1.5.3
 pydantic==1.10.8  # Ensure to match the version if langchain requires a specific one
 agrparse
+librosa == 0.10.2
+soundfile == 0.12.1
+gradio == 1.0.2
+datasets == 2.20.0
