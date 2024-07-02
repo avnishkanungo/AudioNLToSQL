@@ -1,14 +1,17 @@
 # NLToSQL
 
-- This project aims to convert Natural Language inputs to SQL Queries leveraging LLMs and prompt engineering and automatically running these queries and providing an output from the DB, for the same we are leveraging Chat GPT 3.5 Turbo and Langchain for the implementation. 
+- This project aims to convert Natural Language inputs in form of text and audio to SQL Queries leveraging LLMs and prompt engineering and automatically running these queries and providing an output from the DB, for the same we are leveraging Chat GPT 3.5 Turbo, Langchain and Huggingface Transformers for the implementation. 
 - We have also finetuned the performance by providing a way to select only the required tables for the prompts, using a csv which contains the description of the database, for the same we have used a vector database for semantic matching to choose relevant tables as per the table descriptions provided. Refer to the database_table_descriptions.csv file.
 - And have leveraged few shot learning method provided for openAI models via langchain to train the model to the pecific kind of queries that we need answered. Refer to the few_shot_samples.json file.
+- For the audio module, I trained a Automatic Speech Recognition model using hugingface transformers saved the same to the HuggingFace Hub and used it to convert recorded audio into text which is then passed as input to the Langchain LLM setup to convert to SQL queries which are run on the database and outputs from the same are returned.
+Model link on HuggingFace: https://huggingface.co/avnishkanungo/whisper-small-dv
+
 
 This script can be run on any local msql database provided you input the correct username, password, host name and DB name. All of these can be passed as arguments to the command to run the provided script.
 
 To install required libraries:
 ```
-pip install -r requirments.txt
+pip install -r requirements.txt
 ```
 
 To run this code please traverse into the directory where the NLT0SQL.py script is present and use run the below command with your Open AI API key on your own database please use the below command:
@@ -41,7 +44,9 @@ Example implementation on dummy database post running the code:
 
 ![alt text](image.png)
 
+
 References: 
 - https://blog.futuresmart.ai/mastering-natural-language-to-sql-with-langchain-nl2sql
 - https://python.langchain.com/v0.1/docs/modules/model_io/prompts/few_shot_examples_chat/
 - https://python.langchain.com/v0.1/docs/use_cases/sql/
+- https://huggingface.co/learn/audio-course/en/chapter5/fine-tuning
