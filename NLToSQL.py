@@ -219,7 +219,7 @@ if __name__ == '__main__':
     # print(db.dialect)
     # print(db.get_usable_table_names())
     # print(db.table_info)
-    os.environ["OPENAI_API_KEY"] =  args.open_ai_key  ## sk-proj-bdAIsQkrSB9uewgICSyiT3BlbkFJHGj7jCI2HAF9KIajD5XH
+    os.environ["OPENAI_API_KEY"] =  args.open_ai_key  
 
     history = ChatMessageHistory()
 
