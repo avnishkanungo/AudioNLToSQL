@@ -197,6 +197,32 @@ def record_command():
         print("Audio saved to variable")
         return audio_data
 
+def check_libportaudio_installed():
+    try:
+        # Run `ffmpeg -version` to check if ffmpeg is installed
+        subprocess.run(['libportaudio2', '-version'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+def install_libportaudio():
+    try:
+        if sys.platform.startswith('linux'):
+            subprocess.run(['sudo', 'apt-get', 'update'], check=True)
+            subprocess.run(['sudo', 'apt-get', 'install', '-y', 'libportaudio2'], check=True)
+        elif sys.platform == 'darwin':  # macOS
+            subprocess.run(['/bin/bash', '-c', 'brew install portaudio'], check=True)
+        elif sys.platform == 'win32':
+            print("Please download ffmpeg from https://ffmpeg.org/download.html and install it manually.")
+            return False
+        else:
+            print("Unsupported OS. Please install ffmpeg manually.")
+            return False
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install ffmpeg: {e}")
+        return False
+    return True
+
 
 if __name__ == '__main__':
 
@@ -247,6 +273,15 @@ if __name__ == '__main__':
         print("ffmpeg installation successful.")
     else:
         print("ffmpeg installation failed. Please install it manually.")
+    
+    if check_libportaudio_installed():
+        print("libportaudio is already installed.")
+    else:
+        print("libportaudio is not installed. Installing ffmpeg...")
+    if install_libportaudio():
+        print("libportaudio installation successful.")
+    else:
+        print("libportaudio installation failed. Please install it manually.")
 
     valid_interface_type = ["audio", "text", "quit"]
     while True:

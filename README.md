@@ -1,3 +1,9 @@
+---
+title: AudioNLtoSQL
+app_file: app.py
+sdk: gradio
+sdk_version: 4.37.2
+---
 # NLToSQL
 
 - This project aims to convert Natural Language inputs in form of text and audio to SQL Queries leveraging LLMs and prompt engineering and automatically running these queries and providing an output from the DB, for the same we are leveraging Chat GPT 3.5 Turbo, Langchain and Huggingface Transformers for the implementation. 

@@ -63,6 +63,106 @@
         {
             "input": "How many employees are there",
             "query": "SELECT COUNT(*) FROM 'Employee'"
+        },
+        {
+            "input": "Retrieve the first name and last name of all employees.",
+            "query": "SELECT firstName, lastName FROM employees;"
+        },
+        {
+            "input": "List the product names and their respective buy prices.",
+            "query": "SELECT productName, buyPrice FROM products;"
+        },
+        {
+            "input": "Find the names and cities of all customers.",
+            "query": "SELECT customerName, city FROM customers;"
+        },
+        {
+            "input": "Get the order dates and statuses of all orders.",
+            "query": "SELECT orderDate, status FROM orders;"
+        },
+        {
+            "input": "Retrieve the product codes and quantities of all items ordered.",
+            "query": "SELECT productCode, quantityOrdered FROM orderdetails;"
+        },
+        {
+            "input": "List the customer names and their sales representatives' employee numbers.",
+            "query": "SELECT customerName, salesRepEmployeeNumber FROM customers;"
+        },
+        {
+            "input": "Find the names of products that have a quantity in stock greater than 100.",
+            "query": "SELECT productName FROM products WHERE quantityInStock > 100;"
+        },
+        {
+            "input": "Retrieve the office codes and their corresponding cities and countries.",
+            "query": "SELECT officeCode, city, country FROM offices;"
+        },
+        {
+            "input": "Get the last name and job title of employees who work in office '1'.",
+            "query": "SELECT lastName, jobTitle FROM employees WHERE officeCode = '1';"
+        },
+        {
+            "input": "Find all orders placed in 2020.",
+            "query": "SELECT * FROM orders WHERE YEAR(orderDate) = 2020;"
+        },
+        {
+            "input": "List the customer names and the total amount they have ordered.",
+            "query": "SELECT customerName, SUM(quantityOrdered * priceEach) AS totalAmount FROM customers c JOIN orders o ON c.customerNumber = o.customerNumber JOIN orderdetails od ON o.orderNumber = od.orderNumber GROUP BY customerName;"
+        },
+        {
+            "input": "Retrieve the names of employees who have the title 'Sales Rep'.",
+            "query": "SELECT firstName, lastName FROM employees WHERE jobTitle = 'Sales Rep';"
+        },
+        {
+            "input": "List the product lines and the number of products in each line.",
+            "query": "SELECT productLine, COUNT(*) AS numberOfProducts FROM products GROUP BY productLine;"
+        },
+        {
+            "input": "Find the customers who have placed more than 10 orders.",
+            "query": "SELECT customerName FROM customers c JOIN orders o ON c.customerNumber = o.customerNumber GROUP BY customerName HAVING COUNT(*) > 10;"
+        },
+        {
+            "input": "Retrieve the top 5 most expensive products.",
+            "query": "SELECT productName, buyPrice FROM products ORDER BY buyPrice DESC LIMIT 5;"
+        },
+        {
+            "input": "List the employees who report to employee number 1143.",
+            "query": "SELECT firstName, lastName FROM employees WHERE reportsTo = 1143;"
+        },
+        {
+            "input": "Find the total number of orders for each customer.",
+            "query": "SELECT customerName, COUNT(*) AS totalOrders FROM customers c JOIN orders o ON c.customerNumber = o.customerNumber GROUP BY customerName;"
+        },
+        {
+            "input": "Retrieve the names of all customers who are located in 'USA'.",
+            "query": "SELECT customerName FROM customers WHERE country = 'USA';"
+        },
+        {
+            "input": "List the product codes and names of products that belong to the 'Classic Cars' product line.",
+            "query": "SELECT productCode, productName FROM products WHERE productLine = 'Classic Cars';"
+        },
+        {
+            "input": "Find the offices where the state is 'CA'.",
+            "query": "SELECT officeCode, city FROM offices WHERE state = 'CA';"
+        },
+        {
+            "input": "List the customer names along with the names of their sales representatives.",
+            "query": "SELECT c.customerName, e.firstName, e.lastName FROM customers c INNER JOIN employees e ON c.salesRepEmployeeNumber = e.employeeNumber;"
+        },
+        {
+            "input": "Retrieve the order numbers and product names for all orders.",
+            "query": "SELECT o.orderNumber, p.productName FROM orders o INNER JOIN orderdetails od ON o.orderNumber = od.orderNumber INNER JOIN products p ON od.productCode = p.productCode;"
+        },
+        {
+            "input": "List all customers and their orders, including those who have not placed any orders (LEFT JOIN).",
+            "query": "SELECT c.customerName, o.orderNumber FROM customers c LEFT JOIN orders o ON c.customerNumber = o.customerNumber;"
+        },
+        {
+            "input": "Find all orders and their corresponding customers, including orders without associated customers (RIGHT JOIN).",
+            "query": "SELECT o.orderNumber, c.customerName FROM orders o RIGHT JOIN customers c ON o.customerNumber = c.customerNumber;"
+        },
+        {
+            "input": "Return the number of employees in Paris.",
+            "query": "SELECT COUNT(*) AS numberOfEmployees FROM employees e JOIN offices o ON e.officeCode = o.officeCode WHERE o.city = 'Paris';"
         }
 
     ]
