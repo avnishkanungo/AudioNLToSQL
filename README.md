@@ -58,7 +58,7 @@ To run a demo of the code yourself, please install the required libraries using 
 - Using the app.py script:  Similar to the notebook you can make the required changes to the DB connection setup to coneect to your database if needed and the files required for finetuing(database_table_descriptions.csv and few_shot_samples.json files) and run the app.py script to trigger the web app using gradio.
 - Running the scipt on the terminal using the NLToSQL.py script: The instructions for the same can be found above.
 
-NOTE: You will need to have the database tht you want to connect to, active on your machine or hosted on a server, for the script to work without any issue. 
+NOTE: You will need to have the database that you want to connect to, active on your machine or hosted on a server, for the script to work without any issue. 
 
 References: 
 - https://blog.futuresmart.ai/mastering-natural-language-to-sql-with-langchain-nl2sql
