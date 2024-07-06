@@ -226,9 +226,9 @@ def sql_translator(filepath, key):
         return True
 
     
-    db_user = "root"
-    db_password = ""
-    db_host = "localhost"
+    db_user = "admin"
+    db_password = "avnishk96"
+    db_host = "demo-db.cdm44iseol25.us-east-1.rds.amazonaws.com"
     db_name = "classicmodels"
 
     db = SQLDatabase.from_uri(f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}")
@@ -247,30 +247,30 @@ def sql_translator(filepath, key):
 
     execute_query = QuerySQLDataBaseTool(db=db)
 
-    if is_ffmpeg_installed():
-        print("ffmpeg is already installed.")
-    else:
-        print("ffmpeg is not installed. Installing ffmpeg...")
-    if install_ffmpeg():
-        print("ffmpeg installation successful.")
-    else:
-        print("ffmpeg installation failed. Please install it manually.")
+    # if is_ffmpeg_installed():
+    #     print("ffmpeg is already installed.")
+    # else:
+    #     print("ffmpeg is not installed. Installing ffmpeg...")
+    # if install_ffmpeg():
+    #     print("ffmpeg installation successful.")
+    # else:
+    #     print("ffmpeg installation failed. Please install it manually.")
     
-    if check_libportaudio_installed():
-        print("libportaudio is already installed.")
-    else:
-        print("libportaudio is not installed. Installing ffmpeg...")
-    if install_libportaudio():
-        print("libportaudio installation successful.")
-    else:
-        print("libportaudio installation failed. Please install it manually.")
+    # if check_libportaudio_installed():
+    #     print("libportaudio is already installed.")
+    # else:
+    #     print("libportaudio is not installed. Installing ffmpeg...")
+    # if install_libportaudio():
+    #     print("libportaudio installation successful.")
+    # else:
+    #     print("libportaudio installation failed. Please install it manually.")
 
     if os.path.isfile(filepath):
         sql_query = transcribe_speech(filepath)
     else:
         sql_query = filepath
     
-    sql_query = transcribe_speech(filepath)
+    # sql_query = transcribe_speech(filepath)
     chain = (
     RunnablePassthrough.assign(table_names_to_use=select_table(os.getcwd()+"/database_table_descriptions.csv")) |
     RunnablePassthrough.assign(query=generate_query).assign(
@@ -287,25 +287,6 @@ def sql_translator(filepath, key):
 
 
 def create_interface():
-    # with gr.Blocks() as interface:
-    #     gr.Markdown("## Audio and Text Processing Interface")
-
-    #     # Text input component
-    #     text_input = gr.Textbox(lines=2, placeholder="Enter text here...", label="Input Text")
-        
-    #     # Audio input component
-    #     audio_input = gr.Audio(sources="microphone", type="filepath", label="Record or Upload Audio")
-        
-    #     # Button to trigger processing
-    #     process_button = gr.Button("Process")
-        
-    #     # Output component
-    #     output_text = gr.Textbox(label="Output")
-
-    #     # Define the action for the button click
-    #     process_button.click(fn=sql_translator, inputs=[audio_input, text_input], outputs=output_text)
-
-    # return interface
 
     demo = gr.Blocks()
     
@@ -329,14 +310,14 @@ def create_interface():
     with demo:
         gr.TabbedInterface(
             [mic_transcribe, file_transcribe],
-            ["Transcribe Microphone", "Transcribe Audio File"],
+            ["Audio Query", "Text Query"],
         )
     
-    demo.launch(debug=True)
+    demo.launch(share=True)
 
     # return interface
 
 
 if __name__ == "__main__":
     interface = create_interface()
-    interface.launch(share=True)
+    # interface.launch(debug=True)

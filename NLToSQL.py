@@ -226,6 +226,7 @@ def install_libportaudio():
 
 if __name__ == '__main__':
 
+    # Please configure your DB credentials and paths of the files for few shot learning and fine tuning
     parser = ArgumentParser()
     parser.add_argument('--example_path', type=str, default=os.getcwd()+"/few_shot_samples.json")
     parser.add_argument('--desc_path', type=str, default=os.getcwd()+"/database_table_descriptions.csv")
